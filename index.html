@@ -1,56 +1,59 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>شبكة غزة نت</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>شبكة غزة نت</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <button id="themeToggle" class="theme-btn">🌙</button>
 <button id="plansBtn" class="floating-plans-btn">💳</button>
 
 <div class="top-bar">
-
-<span>📡 المهندس احمد  </span>
+<span>📡 المهندس احمد</span>
 
 <div class="signal">
-
 <span></span>
 <span></span>
 <span></span>
 <span></span>
-
 </div>
 
 <span id="connectionDot" class="dot offline"></span>
-
 </div>
 
 <div class="toast" id="toast"></div>
 
 <div class="container">
-    <div class="glass-card" id="mainCard">
-        <h1 class="main-title">شبكة غزة نت</h1>
+<div class="glass-card" id="mainCard">
 
-        <div class="info-box">📅 <span id="date"></span></div>
-        <div class="info-box">⏰ <span id="time"></span></div>
+<h1 class="main-title">شبكة غزة نت</h1>
 
-        <div class="info-box status-box">
-            حالة الباقة: <span id="status">غير متصل</span>
-        </div>
+<div class="info-box">📅 <span id="date"></span></div>
+<div class="info-box">⏰ <span id="time"></span></div>
 
-        <form id="loginForm">
-            <div class="input-container">
-                <div class="input-box">
-                    <input type="text" id="cardInput" placeholder="رقم الكرت" required>
-                </div>
-                <button type="button" id="saveCardBtn">💾 حفظ الكرت</button>
-            </div>
+<div class="info-box status-box">
+حالة الباقة: <span id="status">غير متصل</span>
+</div>
 
-            <div class="input-box select-wrapper">
-                <select id="speedSelect">
+<form id="loginForm">
+
+<div class="input-container">
+
+<div class="input-box">
+<input type="text" id="cardInput" placeholder="رقم الكرت" required>
+</div>
+
+<button type="button" id="saveCardBtn">💾 حفظ الكرت</button>
+
+</div>
+
+<div class="input-box select-wrapper">
+
+<select id="speedSelect">
 
 <option selected disabled>🚀 اختر سرعة الاتصال</option>
 
@@ -63,54 +66,90 @@
 <option value="ultra">🚀 سرعة خارقة</option>
 
 </select>
-            </div>
 
-            <button type="submit" class="submit-btn">تسجيل الدخول</button>
+</div>
 
-            <button type="button" id="logoutBtn" class="logout-btn">تسجيل خروج</button>
+<button type="submit" class="submit-btn">تسجيل الدخول</button>
 
-            <div class="info-box" id="timerBox" style="display:none; margin-top:15px;">
-                ⏳ المتبقي: <span id="countdown">00:00:00</span>
-            </div>
-                 <div class="info-box" id="dataUsageBox" style="display:none;">
-                    <div class="info-box speed-box" id="speedBox" style="display:none;">
+<button type="button" id="logoutBtn" class="logout-btn">تسجيل خروج</button>
+
+<div class="info-box" id="timerBox" style="display:none;">
+⏳ المتبقي: <span id="countdown">00:00:00</span>
+</div>
+
+<div class="info-box" id="dataUsageBox" style="display:none;">
+
+<div class="info-box speed-box" id="speedBox" style="display:none;">
 ⚡ سرعة الاتصال
 <div class="speed-meter">
 <div id="speedValue">0</div>
 <span>Mbps</span>
 </div>
 </div>
-           📶 استهلاك البيانات: <span id="dataUsage">0</span> MB
-            </div>
-            <div class="progress-bar" id="progressBar" style="display:none;">
-                <div class="progress"></div>
-            </div>
-        </form>
 
-        <div class="links">
-            <a href="#" id="openPlansLink">أسعار الباقات</a>
-            <a href="https://wa.me/771916957r">الدعم الفني</a>
-        </div>
-    </div>
+📶 استهلاك البيانات: <span id="dataUsage">0</span> MB
+
+</div>
+
+<div class="progress-bar" id="progressBar" style="display:none;">
+<div class="progress"></div>
+</div>
+
+</form>
+
+<div class="links">
+<a href="#" id="openPlansLink">أسعار الباقات</a>
+<a href="https://wa.me/771916957">الدعم الفني</a>
+</div>
+
+</div>
 </div>
 
 <div id="plansPage" class="plans-page">
-    <div class="plans-container">
-        <h2>💳 باقات الإنترنت</h2>
-        <div class="plan-box">
-            <h3>باقة 200 ريال</h3>
-            <p>⏱ 4 ساعات | 📶 900 ميجا</p>
-        </div>
-        <div class="plan-box">
-            <h3>باقة 500 ريال</h3>
-            <p>⏱ 12 ساعة | 📶 2500 ميجا</p>
-        </div>
-        <button class="closePlans">إغلاق</button>
-    </div>
+
+<div class="plans-container">
+
+<h2>💳 باقات الإنترنت</h2>
+
+<div class="plan-box">
+<h3>باقة 200 ريال</h3>
+<p>⏱ 4 ساعات | 📶 900 ميجا</p>
+</div>
+
+<div class="plan-box">
+<h3>باقة 500 ريال</h3>
+<p>⏱ 12 ساعة | 📶 2500 ميجا</p>
+</div>
+
+<button class="closePlans">إغلاق</button>
+
+</div>
+
 </div>
 
 <a href="https://wa.me/771916957" class="whatsapp-btn">💬</a>
 
+
+<!-- نافذة تسجيل الدخول والخروج -->
+
+<div id="popup" class="popup">
+
+<div class="popup-box">
+
+<h2 id="popupTitle"></h2>
+
+<p id="popupText"></p>
+
+<div id="popupTimer"></div>
+
+<button id="popupBtn">موافق</button>
+
+</div>
+
+</div>
+
+
 <script src="script.js"></script>
+
 </body>
 </html>

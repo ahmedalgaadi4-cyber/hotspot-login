@@ -1,190 +1,454 @@
 let speedInterval = null;
 let dataUsage = 0;
 let dataInterval = null;
-/* 1. تحديث الوقت والتاريخ */
+
+/* تحديث الوقت والتاريخ */
+
 function updateDateTime() {
-    const now = new Date();
-    const dateElem = document.getElementById("date");
-    const timeElem = document.getElementById("time");
-    
-    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    if (dateElem) dateElem.textContent = now.toLocaleDateString('ar-EG', dateOptions);
-    if (timeElem) timeElem.textContent = now.toLocaleTimeString('ar-EG');
+
+const now = new Date();
+
+const dateElem = document.getElementById("date");
+const timeElem = document.getElementById("time");
+
+const dateOptions = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+
+if(dateElem) dateElem.textContent = now.toLocaleDateString('ar-EG',dateOptions);
+
+if(timeElem) timeElem.textContent = now.toLocaleTimeString('ar-EG');
+
 }
-setInterval(updateDateTime, 1000);
+
+setInterval(updateDateTime,1000);
 updateDateTime();
 
-/* 2. التحكم بالوضع الليلي */
-const themeToggle = document.getElementById("themeToggle");
-themeToggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark");
-    themeToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+
+
+/* الوضع الليلي */
+
+const themeToggle=document.getElementById("themeToggle");
+
+themeToggle.addEventListener("click",()=>{
+
+document.body.classList.toggle("dark");
+
+themeToggle.textContent=document.body.classList.contains("dark") ? "☀️":"🌙";
+
 });
 
-/* 3. عناصر النظام */
-const loginForm = document.getElementById("loginForm");
-const statusTxt = document.getElementById("status");
-const dot = document.getElementById("connectionDot");
-const cardInput = document.getElementById("cardInput");
-const countdownTxt = document.getElementById("countdown");
-const progressInner = document.querySelector(".progress");
-const logoutBtn = document.getElementById("logoutBtn");
-const speedSelect = document.getElementById("speedSelect");
-const toast = document.getElementById("toast");
 
-let timerInterval = null;
 
-/* 4. إظهار رسائل التنبيه */
-function showToast(msg) {
-    toast.textContent = msg;
-    toast.style.display = "block";
-    setTimeout(() => { toast.style.display = "none"; }, 3000);
+/* عناصر النظام */
+
+const loginForm=document.getElementById("loginForm");
+const statusTxt=document.getElementById("status");
+const dot=document.getElementById("connectionDot");
+const cardInput=document.getElementById("cardInput");
+const countdownTxt=document.getElementById("countdown");
+const progressInner=document.querySelector(".progress");
+const logoutBtn=document.getElementById("logoutBtn");
+const speedSelect=document.getElementById("speedSelect");
+const toast=document.getElementById("toast");
+
+
+
+let timerInterval=null;
+
+
+
+/* toast */
+
+function showToast(msg){
+
+toast.textContent=msg;
+
+toast.style.display="block";
+
+setTimeout(()=>{
+
+toast.style.display="none";
+
+},3000);
+
 }
 
-/* 5. إدارة الجلسة */
-function startSession(expiry, duration) {
-    document.getElementById("speedBox").style.display = "block";
 
-speedInterval = setInterval(()=>{
 
-const speed = (Math.random()*40+10).toFixed(1);
+/* النوافذ المنبثقة */
 
-document.getElementById("speedValue").textContent = speed;
+const popup=document.getElementById("popup");
+const popupTitle=document.getElementById("popupTitle");
+const popupText=document.getElementById("popupText");
+const popupTimer=document.getElementById("popupTimer");
+const popupBtn=document.getElementById("popupBtn");
+
+
+
+function showLoginPopup(){
+
+popupTitle.textContent="✅ تم تسجيل الدخول بنجاح";
+
+popupText.textContent="تم الاتصال بالشبكة";
+
+popupTimer.textContent="";
+
+popup.style.display="flex";
+
+popupBtn.onclick=function(){
+
+popup.style.display="none";
+
+};
+
+}
+
+
+
+function showLogoutPopup(){
+
+popupTitle.textContent="⚠️ تم تسجيل خروجك";
+
+popupText.textContent="يمكنك تسجيل الدخول مرة أخرى";
+
+let seconds=5;
+
+popupTimer.textContent=seconds;
+
+popup.style.display="flex";
+
+let timer=setInterval(()=>{
+
+seconds--;
+
+popupTimer.textContent=seconds;
+
+if(seconds<=0){
+
+clearInterval(timer);
+
+popup.style.display="none";
+
+}
+
+},1000);
+
+popupBtn.onclick=function(){
+
+popup.style.display="none";
+
+};
+
+}
+
+
+
+/* بدء الجلسة */
+
+function startSession(expiry,duration){
+
+document.getElementById("speedBox").style.display="block";
+
+speedInterval=setInterval(()=>{
+
+const speed=(Math.random()*40+10).toFixed(1);
+
+document.getElementById("speedValue").textContent=speed;
 
 },2000);
-    statusTxt.textContent = "متصل";
-    statusTxt.style.color = "#00ffcc";
-    dot.className = "dot online";
-    
-    document.getElementById("timerBox").style.display = "block";
-    document.getElementById("progressBar").style.display = "block";
-    document.getElementById("dataUsageBox").style.display = "block";
 
-dataInterval = setInterval(() => {
 
-dataUsage += Math.floor(Math.random() * 3) + 1;
 
-document.getElementById("dataUsage").textContent = dataUsage;
+statusTxt.textContent="متصل";
+statusTxt.style.color="#00ffcc";
 
-}, 3000);
-    logoutBtn.style.display = "block";
-    document.getElementById("mainCard").classList.add("connected");
+dot.className="dot online";
 
-    if (timerInterval) clearInterval(timerInterval);
 
-    timerInterval = setInterval(() => {
-        const now = Date.now();
-        const remaining = Math.floor((expiry - now) / 1000);
 
-        if (remaining <= 0) {
-            endSession();
-            return;
-        }
+document.getElementById("timerBox").style.display="block";
+document.getElementById("progressBar").style.display="block";
+document.getElementById("dataUsageBox").style.display="block";
 
-        const h = Math.floor(remaining / 3600).toString().padStart(2, '0');
-        const m = Math.floor((remaining % 3600) / 60).toString().padStart(2, '0');
-        const s = (remaining % 60).toString().padStart(2, '0');
-        
-        countdownTxt.textContent = `${h}:${m}:${s}`;
-        const percentage = (remaining / duration) * 100;
-        progressInner.style.width = percentage + "%";
-    }, 1000);
+
+
+dataInterval=setInterval(()=>{
+
+dataUsage+=Math.floor(Math.random()*3)+1;
+
+document.getElementById("dataUsage").textContent=dataUsage;
+
+},3000);
+
+
+
+logoutBtn.style.display="block";
+
+document.getElementById("mainCard").classList.add("connected");
+
+
+
+if(timerInterval) clearInterval(timerInterval);
+
+
+
+timerInterval=setInterval(()=>{
+
+const now=Date.now();
+
+const remaining=Math.floor((expiry-now)/1000);
+
+
+
+if(remaining<=0){
+
+endSession();
+
+return;
+
 }
 
-function endSession() {
-    clearInterval(speedInterval);
 
-document.getElementById("speedBox").style.display = "none";
 
-document.getElementById("speedValue").textContent = "0";
-    clearInterval(timerInterval);
-    localStorage.removeItem("hotspot_session");
-    
-    statusTxt.textContent = "غير متصل";
-    statusTxt.style.color = "#fff";
-    dot.className = "dot offline";
-    
-    document.getElementById("timerBox").style.display = "none";
-    document.getElementById("progressBar").style.display = "none";
-    logoutBtn.style.display = "none";
-    document.getElementById("mainCard").classList.remove("connected");
-    
-    showToast("⚠️ انتهت الجلسة");
-    clearInterval(dataInterval);
+const h=Math.floor(remaining/3600).toString().padStart(2,'0');
 
-document.getElementById("dataUsageBox").style.display = "none";
+const m=Math.floor((remaining%3600)/60).toString().padStart(2,'0');
 
-dataUsage = 0;
+const s=(remaining%60).toString().padStart(2,'0');
 
-document.getElementById("dataUsage").textContent = "0";
+
+
+countdownTxt.textContent=`${h}:${m}:${s}`;
+
+
+
+const percentage=(remaining/duration)*100;
+
+progressInner.style.width=percentage+"%";
+
+
+
+},1000);
+
 }
 
-/* 6. الأحداث (Events) */
+
+
+/* إنهاء الجلسة */
+
+function endSession(){
+
+clearInterval(speedInterval);
+
+clearInterval(dataInterval);
+
+clearInterval(timerInterval);
+
+
+
+document.getElementById("speedBox").style.display="none";
+
+document.getElementById("speedValue").textContent="0";
+
+
+
+localStorage.removeItem("hotspot_session");
+
+
+
+statusTxt.textContent="غير متصل";
+
+statusTxt.style.color="#fff";
+
+dot.className="dot offline";
+
+
+
+document.getElementById("timerBox").style.display="none";
+
+document.getElementById("progressBar").style.display="none";
+
+document.getElementById("dataUsageBox").style.display="none";
+
+
+
+logoutBtn.style.display="none";
+
+
+
+dataUsage=0;
+
+document.getElementById("dataUsage").textContent="0";
+
+
+
+document.getElementById("mainCard").classList.remove("connected");
+
+}
+
+
+
+/* تسجيل الدخول */
+
 loginForm.addEventListener("submit",(e)=>{
 
 e.preventDefault();
 
 showToast("⏳ جاري الاتصال ...");
 
+
+
 setTimeout(()=>{
 
-let duration = 3600;
+let duration=3600;
 
-const speed = speedSelect.value;
 
-/* تحديد مدة الجلسة حسب السرعة */
 
-if(speed === "normal") duration = 3600;
+const speed=speedSelect.value;
 
-if(speed === "medium") duration = 5400;
 
-if(speed === "high") duration = 7200;
 
-if(speed === "ultra") duration = 9000;
+if(speed==="normal") duration=3600;
 
-const expiry = Date.now() + (duration * 1000);
+if(speed==="medium") duration=5400;
 
-localStorage.setItem("hotspot_session",JSON.stringify({expiry,duration}));
+if(speed==="high") duration=7200;
+
+if(speed==="ultra") duration=9000;
+
+
+
+const expiry=Date.now()+(duration*1000);
+
+
+
+localStorage.setItem("hotspot_session",
+
+JSON.stringify({expiry,duration})
+
+);
+
+
 
 startSession(expiry,duration);
 
-showToast("✅ تم الاتصال بنجاح");
+
+
+showLoginPopup();
+
+
 
 },1200);
 
 });
 
-logoutBtn.addEventListener("click", endSession);
 
-document.getElementById("saveCardBtn").addEventListener("click", () => {
-    const val = cardInput.value.trim();
-    if (val) {
-        localStorage.setItem("saved_card", val);
-        showToast("💾 تم حفظ رقم الكرت");
-    } else {
-        showToast("❌ أدخل رقم الكرت أولاً");
-    }
+
+/* تسجيل الخروج */
+
+logoutBtn.addEventListener("click",()=>{
+
+endSession();
+
+showLogoutPopup();
+
 });
 
-/* 7. إدارة النوافذ المنبثقة */
-const plansPage = document.getElementById("plansPage");
-const openPlans = [document.getElementById("plansBtn"), document.getElementById("openPlansLink")];
 
-openPlans.forEach(btn => {
-    btn.onclick = (e) => { e.preventDefault(); plansPage.style.display = "flex"; };
+
+/* حفظ الكرت */
+
+document.getElementById("saveCardBtn").addEventListener("click",()=>{
+
+const val=cardInput.value.trim();
+
+
+
+if(val){
+
+localStorage.setItem("saved_card",val);
+
+showToast("💾 تم حفظ رقم الكرت");
+
+}else{
+
+showToast("❌ أدخل رقم الكرت أولاً");
+
+}
+
 });
 
-document.querySelector(".closePlans").onclick = () => { plansPage.style.display = "none"; };
 
-window.onclick = (e) => { if (e.target == plansPage) plansPage.style.display = "none"; };
 
-/* 8. تحميل البيانات عند الفتح */
-window.onload = () => {
-    const savedCard = localStorage.getItem("saved_card");
-    if (savedCard) cardInput.value = savedCard;
+/* صفحة الباقات */
 
-    const session = JSON.parse(localStorage.getItem("hotspot_session"));
-    if (session && session.expiry > Date.now()) {
-        startSession(session.expiry, session.duration);
-    }
+const plansPage=document.getElementById("plansPage");
+
+const openPlans=[
+
+document.getElementById("plansBtn"),
+
+document.getElementById("openPlansLink")
+
+];
+
+
+
+openPlans.forEach(btn=>{
+
+btn.onclick=(e)=>{
+
+e.preventDefault();
+
+plansPage.style.display="flex";
+
+};
+
+});
+
+
+
+document.querySelector(".closePlans").onclick=()=>{
+
+plansPage.style.display="none";
+
+};
+
+
+
+window.onclick=(e)=>{
+
+if(e.target==plansPage){
+
+plansPage.style.display="none";
+
+}
+
+};
+
+
+
+/* تحميل البيانات */
+
+window.onload=()=>{
+
+const savedCard=localStorage.getItem("saved_card");
+
+if(savedCard) cardInput.value=savedCard;
+
+
+
+const session=JSON.parse(
+
+localStorage.getItem("hotspot_session")
+
+);
+
+
+
+if(session && session.expiry>Date.now()){
+
+startSession(session.expiry,session.duration);
+
+}
+
 };
