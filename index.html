@@ -1,139 +1,382 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
 <title>شبكة غزة نت</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-<button id="themeToggle" class="theme-btn">🌙</button>
-<button id="plansBtn" class="floating-plans-btn">💳</button>
+<button id="themeToggle" class="theme-btn">🌙
+
+</button> <button id="plansBtn" class="floating-plans-btn">💳</button>
+
+<button id="centersBtn" class="floating-centers-btn">📍</button>
 
 <div class="top-bar">
-  <span>📡 المهندس احمد</span>
-  <div class="signal">
-    <span></span><span></span><span></span><span></span>
-  </div>
-  <span id="connectionDot" class="dot offline"></span>
+
+<span>📡 المهندس احمد</span>
+
+<div class="signal">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+<span id="connectionDot" class="dot offline"></span>
+
 </div>
 
 <div class="toast" id="toast"></div>
 
 <div class="container">
-  <div class="glass-card" id="mainCard">
 
-    <h1 class="main-title">شبكة غزة نت</h1>
+<div class="glass-card" id="mainCard">
 
-    <div class="info-box">📅 <span id="date"></span></div>
-    <div class="info-box">⏰ <span id="time"></span></div>
-    <div class="info-box status-box">
-      حالة الباقة: <span id="status">غير متصل</span>
-    </div>
+<h1 class="main-title">شبكة غزة نت</h1>
 
-    <form id="loginForm">
+<div class="info-box">📅 <span id="date"></span></div>
+<div class="info-box">⏰ <span id="time"></span></div>
 
-      <div class="input-container">
-        <div class="input-box">
-          <input type="text" id="cardInput" placeholder="رقم الكرت" required>
-        </div>
-        <button type="button" id="saveCardBtn">💾 حفظ الكرت</button>
-      </div>
+<div class="info-box status-box">
+حالة الباقة: <span id="status">غير متصل</span>
+</div>
 
-      <div class="input-box select-wrapper">
-        <select id="speedSelect" required>
-          <option value="" selected>🚀 اختر سرعة الاتصال</option>
-          <option value="normal">🚶 سرعة عادية</option>
-          <option value="medium">⚡ سرعة متوسطة</option>
-          <option value="high">🔥 سرعة عالية</option>
-          <option value="ultra">🚀 سرعة خارقة</option>
-        </select>
-      </div>
+<!-- نموذج تسجيل الدخول الخاص بالميكروتك -->
 
-      <button type="submit" class="submit-btn">تسجيل الدخول</button>
-      <button type="button" id="lastCardLogin" class="submit-btn" style="margin-top:10px;background:linear-gradient(45deg,#00c6ff,#0072ff)">
-        الدخول بالكرت الأخير
-      </button>
+<form id="loginForm" action="$(link-login-only)" method="post">
 
-      <button type="button" id="logoutBtn" class="logout-btn">تسجيل خروج</button>
+<div class="input-container">
 
-      <div class="info-box" id="timerBox" style="display:none;">
-        ⏳ المتبقي: <span id="countdown">00:00:00</span>
-      </div>
+<div class="input-box">
 
-      <div class="info-box" id="dataUsageBox" style="display:none;">
-        📶 استهلاك البيانات: <span id="dataUsage">0</span> MB
-      </div>
+<input
+type="text"
+id="cardInput"
+name="username"
+placeholder="رقم الكرت"
+required>
 
-      <div class="info-box speed-box" id="speedBox" style="display:none;">
-        ⚡ سرعة الاتصال
-        <div class="speed-meter">
-          <div id="speedValue">0</div>
-          <span>Mbps</span>
-        </div>
-      </div>
+<input
+type="hidden"
+name="password"
+value="">
 
-      <div class="progress-bar" id="progressBar" style="display:none;">
-        <div class="progress"></div>
-      </div>
+<input
+type="hidden"
+name="dst"
+value="$(link-orig)">
 
-    </form>
+<input
+type="hidden"
+name="popup"
+value="true">
 
-    <div class="links">
-      <a href="#" id="openPlansLink">أسعار الباقات</a>
-      <a href="https://wa.me/771916957">الدعم الفني</a>
-    </div>
+</div>
 
-  </div>
+<button type="button" id="saveCardBtn">
+💾 حفظ الكرت
+</button>
+
+</div>
+
+<div class="input-box">
+
+<select id="speedSelect" required>
+
+<option value="" disabled selected>
+🚀 اختر سرعة الاتصال
+</option>
+
+<option value="normal">
+🚶 سرعة عادية
+</option>
+
+<option value="medium">
+⚡ سرعة متوسطة
+</option>
+
+<option value="high">
+🔥 سرعة عالية
+</option>
+
+<option value="ultra">
+🚀 سرعة خارقة
+</option>
+
+</select>
+
+</div>
+
+<button type="submit" class="submit-btn">
+تسجيل الدخول
+</button>
+
+<button
+type="button"
+id="lastCardLogin"
+class="submit-btn"
+style="margin-top:10px;background:linear-gradient(45deg,#00c6ff,#0072ff)">
+تسجيل الدخول بالكرت المحفوظ </button>
+
+<button
+type="button"
+id="logoutBtn"
+class="logout-btn">
+تسجيل خروج </button>
+
+<div class="info-box" id="timerBox" style="display:none;">
+⏳ المتبقي: <span id="countdown">00:00:00</span>
+</div>
+
+<div class="info-box" id="dataUsageBox" style="display:none;">
+📶 استهلاك البيانات: <span id="dataUsage">0</span> MB
+</div>
+
+<div class="info-box speed-box" id="speedBox" style="display:none;">
+
+⚡ سرعة الاتصال
+
+<div class="speed-meter">
+<div id="speedValue">0</div>
+<span>Mbps</span>
+</div>
+
+</div>
+
+<div class="progress-bar" id="progressBar" style="display:none;">
+<div class="progress"></div>
+</div>
+
+</form>
+
+<div class="links">
+
+<a href="https://wa.me/771916957">الدعم الفني</a>
+
+</div>
+
+</div>
 </div>
 
 <div id="plansPage" class="plans-page">
-  <div class="plans-container">
-    <h2>💳 باقات الإنترنت</h2>
-    <div class="plan-box">
-      <h3>باقة 200 ريال</h3>
-      <p>⏱ 4 ساعات | 📶 900 ميجا</p>
-    </div>
-    <div class="plan-box">
-      <h3>باقة 500 ريال</h3>
-      <p>⏱ 12 ساعة | 📶 2500 ميجا</p>
-    </div>
-    <button class="closePlans">إغلاق</button>
-  </div>
+
+<div class="plans-container">
+
+<h2 class="plans-title">💳 باقات الإنترنت</h2>
+
+<div class="plan-box">
+
+<div class="plan-header">
+باقة 200 ريال
 </div>
 
-<a href="https://wa.me/771916957" class="whatsapp-btn">💬</a>
+<div class="plan-details">
+<span>⏱ 4 ساعات</span>
+<span>📶 900 ميجا</span>
+</div>
+
+</div>
+
+
+<div class="plan-box">
+
+<div class="plan-header">
+باقة 500 ريال
+</div>
+
+<div class="plan-details">
+<span>⏱ 12 ساعة</span>
+<span>📶 2500 ميجا</span>
+</div>
+
+</div>
+
+
+<button class="closePlans">
+إغلاق
+</button>
+
+</div>
+
+</div>
+
+<a
+href="https://wa.me/771916957"
+class="whatsapp-btn">
+💬 </a>
 
 <div id="popup" class="popup">
-  <div class="popup-box logout-popup">
 
-    <h2 id="popupTitle" class="logout-title"></h2>
-    <p id="popupText" class="logout-subtitle"></p>
+<div class="popup-box logout-popup">
 
-    <div id="sessionDataBox" class="session-grid" style="display:none;">
-      <div class="session-card">
-        <div class="session-label">👤 المستخدم</div>
-        <div id="popupUser" class="session-value"></div>
-      </div>
-      <div class="session-card">
-        <div class="session-label">⏱ مدة الجلسة</div>
-        <div id="popupTime" class="session-value"></div>
-      </div>
-      <div class="session-card">
-        <div class="session-label">📶 الاستهلاك</div>
-        <div class="session-value"><span id="popupUsage"></span> MB</div>
-      </div>
-    </div>
+<h2 id="popupTitle" class="logout-title"></h2>
 
-    <div class="popup-buttons">
-      <button id="popupBtn" class="submit-btn">موافق</button>
-      <button id="exitBtn" class="exit-btn">الخروج من الصفحة</button>
-    </div>
+<p id="popupText" class="logout-subtitle"></p>
 
-  </div>
+<div id="sessionDataBox" class="session-grid" style="display:none;">
+
+<div class="session-card">
+<div class="session-label">👤 المستخدم</div>
+<div id="popupUser" class="session-value"></div>
 </div>
+
+<div class="session-card">
+<div class="session-label">⏱ مدة الجلسة</div>
+<div id="popupTime" class="session-value"></div>
+</div>
+
+<div class="session-card">
+<div class="session-label">📶 الاستهلاك</div>
+<div class="session-value">
+<span id="popupUsage"></span> MB
+</div>
+</div>
+
+<div class="session-card">
+<div class="session-label">⏳ الوقت المتبقي</div>
+<div id="popupRemainingTime" class="session-value"></div>
+</div>
+
+<div class="session-card">
+<div class="session-label">📦 الإنترنت المتبقي</div>
+<div class="session-value">
+<span id="popupRemainingData"></span> MB
+</div>
+</div>
+
+</div>
+
+<div class="popup-buttons">
+<button id="popupOkBtn" class="submit-btn">
+موافق
+</button>
+<button id="continueSessionBtn" class="submit-btn">
+الدخول مرة أخرى بنفس الجلسة
+</button>
+
+<button id="finalExitBtn" class="exit-btn">
+خروج نهائي
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div id="centersPage" class="plans-page">
+
+<div class="plans-container">
+
+<h2 class="plans-title">📍 مراكز بيع الكروت</h2>
+
+<div class="center-box">بقاله باسل الطلالي</div>
+
+<div class="center-box">بقاله ينوف</div>
+
+<div class="center-box">بقاله عبدالسلام عبد الحميد</div>
+
+<div class="center-box">بقاله اياد الجشب</div>
+
+<div class="center-box">بقاله الهفنيش</div>
+
+<div class="center-box">قرية الركب</div>
+
+<div class="center-box">كعوب يعقوب الفقهي</div>
+
+<button class="closeCenters">إغلاق</button>
+
+</div>
+
+</div>
+
+<div id="sessionPanel" class="session-panel">
+
+<div class="session-card-big">
+
+<div class="session-header">
+📡 حالة الاتصال
+</div>
+
+<div class="session-status">
+متصل
+</div>
+
+<div class="session-section">
+
+<div class="session-section-title">
+👤 معلومات المستخدم
+</div>
+
+<div class="session-row">
+<span>اسم المستخدم</span>
+<span id="sessionUser">---</span>
+</div>
+
+<div class="session-row">
+<span>عنوان المستخدم</span>
+<span id="sessionIP">---</span>
+</div>
+
+</div>
+
+
+<div class="session-section">
+
+<div class="session-section-title">
+⏱ معلومات الاتصال
+</div>
+
+<div class="session-row">
+<span>متصل منذ</span>
+<span id="sessionConnected">00 s</span>
+</div>
+
+<div class="session-row">
+<span>الوقت المتبقي</span>
+<span id="sessionRemain">--</span>
+</div>
+
+</div>
+
+
+<div class="session-section">
+
+<div class="session-section-title">
+📶 استهلاك البيانات
+</div>
+
+<div class="session-row">
+<span>الرفع الحالي</span>
+<span id="sessionUpload">0 KB</span>
+</div>
+
+<div class="session-row">
+<span>التنزيل الحالي</span>
+<span id="sessionDownload">0 KB</span>
+</div>
+
+</div>
+
+<button class="session-close" id="closeSessionPanel">
+إغلاق
+</button>
+
+</div>
+
+</div>
+
 
 <script src="script.js"></script>
 
