@@ -13,141 +13,127 @@
 <button id="plansBtn" class="floating-plans-btn">💳</button>
 
 <div class="top-bar">
-<span>📡 المهندس احمد</span>
-
-<div class="signal">
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-</div>
-
-<span id="connectionDot" class="dot offline"></span>
+  <span>📡 المهندس احمد</span>
+  <div class="signal">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <span id="connectionDot" class="dot offline"></span>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <div class="container">
-<div class="glass-card" id="mainCard">
+  <div class="glass-card" id="mainCard">
 
-<h1 class="main-title">شبكة غزة نت</h1>
+    <h1 class="main-title">شبكة غزة نت</h1>
 
-<div class="info-box">📅 <span id="date"></span></div>
-<div class="info-box">⏰ <span id="time"></span></div>
+    <div class="info-box">📅 <span id="date"></span></div>
+    <div class="info-box">⏰ <span id="time"></span></div>
+    <div class="info-box status-box">
+      حالة الباقة: <span id="status">غير متصل</span>
+    </div>
 
-<div class="info-box status-box">
-حالة الباقة: <span id="status">غير متصل</span>
-</div>
+    <form id="loginForm">
 
-<form id="loginForm">
+      <div class="input-container">
+        <div class="input-box">
+          <input type="text" id="cardInput" placeholder="رقم الكرت" required>
+        </div>
+        <button type="button" id="saveCardBtn">💾 حفظ الكرت</button>
+      </div>
 
-<div class="input-container">
+      <div class="input-box select-wrapper">
+        <select id="speedSelect" required>
+          <option value="" selected>🚀 اختر سرعة الاتصال</option>
+          <option value="normal">🚶 سرعة عادية</option>
+          <option value="medium">⚡ سرعة متوسطة</option>
+          <option value="high">🔥 سرعة عالية</option>
+          <option value="ultra">🚀 سرعة خارقة</option>
+        </select>
+      </div>
 
-<div class="input-box">
-<input type="text" id="cardInput" placeholder="رقم الكرت" required>
-</div>
+      <button type="submit" class="submit-btn">تسجيل الدخول</button>
+      <button type="button" id="lastCardLogin" class="submit-btn" style="margin-top:10px;background:linear-gradient(45deg,#00c6ff,#0072ff)">
+        الدخول بالكرت الأخير
+      </button>
 
-<button type="button" id="saveCardBtn">💾 حفظ الكرت</button>
+      <button type="button" id="logoutBtn" class="logout-btn">تسجيل خروج</button>
 
-</div>
+      <div class="info-box" id="timerBox" style="display:none;">
+        ⏳ المتبقي: <span id="countdown">00:00:00</span>
+      </div>
 
-<div class="input-box select-wrapper">
+      <div class="info-box" id="dataUsageBox" style="display:none;">
+        📶 استهلاك البيانات: <span id="dataUsage">0</span> MB
+      </div>
 
-<select id="speedSelect">
+      <div class="info-box speed-box" id="speedBox" style="display:none;">
+        ⚡ سرعة الاتصال
+        <div class="speed-meter">
+          <div id="speedValue">0</div>
+          <span>Mbps</span>
+        </div>
+      </div>
 
-<option selected disabled>🚀 اختر سرعة الاتصال</option>
+      <div class="progress-bar" id="progressBar" style="display:none;">
+        <div class="progress"></div>
+      </div>
 
-<option value="normal">🚶 سرعة عادية</option>
+    </form>
 
-<option value="medium">⚡ سرعة متوسطة</option>
+    <div class="links">
+      <a href="#" id="openPlansLink">أسعار الباقات</a>
+      <a href="https://wa.me/771916957">الدعم الفني</a>
+    </div>
 
-<option value="high">🔥 سرعة عالية</option>
-
-<option value="ultra">🚀 سرعة خارقة</option>
-
-</select>
-
-</div>
-
-<button type="submit" class="submit-btn">تسجيل الدخول</button>
-
-<button type="button" id="logoutBtn" class="logout-btn">تسجيل خروج</button>
-
-<div class="info-box" id="timerBox" style="display:none;">
-⏳ المتبقي: <span id="countdown">00:00:00</span>
-</div>
-
-<div class="info-box" id="dataUsageBox" style="display:none;">
-
-<div class="info-box speed-box" id="speedBox" style="display:none;">
-⚡ سرعة الاتصال
-<div class="speed-meter">
-<div id="speedValue">0</div>
-<span>Mbps</span>
-</div>
-</div>
-
-📶 استهلاك البيانات: <span id="dataUsage">0</span> MB
-
-</div>
-
-<div class="progress-bar" id="progressBar" style="display:none;">
-<div class="progress"></div>
-</div>
-
-</form>
-
-<div class="links">
-<a href="#" id="openPlansLink">أسعار الباقات</a>
-<a href="https://wa.me/771916957">الدعم الفني</a>
-</div>
-
-</div>
+  </div>
 </div>
 
 <div id="plansPage" class="plans-page">
-
-<div class="plans-container">
-
-<h2>💳 باقات الإنترنت</h2>
-
-<div class="plan-box">
-<h3>باقة 200 ريال</h3>
-<p>⏱ 4 ساعات | 📶 900 ميجا</p>
-</div>
-
-<div class="plan-box">
-<h3>باقة 500 ريال</h3>
-<p>⏱ 12 ساعة | 📶 2500 ميجا</p>
-</div>
-
-<button class="closePlans">إغلاق</button>
-
-</div>
-
+  <div class="plans-container">
+    <h2>💳 باقات الإنترنت</h2>
+    <div class="plan-box">
+      <h3>باقة 200 ريال</h3>
+      <p>⏱ 4 ساعات | 📶 900 ميجا</p>
+    </div>
+    <div class="plan-box">
+      <h3>باقة 500 ريال</h3>
+      <p>⏱ 12 ساعة | 📶 2500 ميجا</p>
+    </div>
+    <button class="closePlans">إغلاق</button>
+  </div>
 </div>
 
 <a href="https://wa.me/771916957" class="whatsapp-btn">💬</a>
 
-
-<!-- نافذة تسجيل الدخول والخروج -->
-
 <div id="popup" class="popup">
+  <div class="popup-box logout-popup">
 
-<div class="popup-box">
+    <h2 id="popupTitle" class="logout-title"></h2>
+    <p id="popupText" class="logout-subtitle"></p>
 
-<h2 id="popupTitle"></h2>
+    <div id="sessionDataBox" class="session-grid" style="display:none;">
+      <div class="session-card">
+        <div class="session-label">👤 المستخدم</div>
+        <div id="popupUser" class="session-value"></div>
+      </div>
+      <div class="session-card">
+        <div class="session-label">⏱ مدة الجلسة</div>
+        <div id="popupTime" class="session-value"></div>
+      </div>
+      <div class="session-card">
+        <div class="session-label">📶 الاستهلاك</div>
+        <div class="session-value"><span id="popupUsage"></span> MB</div>
+      </div>
+    </div>
 
-<p id="popupText"></p>
+    <div class="popup-buttons">
+      <button id="popupBtn" class="submit-btn">موافق</button>
+      <button id="exitBtn" class="exit-btn">الخروج من الصفحة</button>
+    </div>
 
-<div id="popupTimer"></div>
-
-<button id="popupBtn">موافق</button>
-
+  </div>
 </div>
-
-</div>
-
 
 <script src="script.js"></script>
 
