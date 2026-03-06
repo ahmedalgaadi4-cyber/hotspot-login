@@ -1,3 +1,4 @@
+let connectionTimer=null
 let speedInterval=null
 let timerInterval=null
 let dataInterval=null
@@ -30,6 +31,8 @@ const popupRemainingData=document.getElementById("popupRemainingData")
 
 const sessionDataBox=document.getElementById("sessionDataBox")
 
+/* التاريخ والوقت */
+
 function updateDateTime(){
 
 const now=new Date()
@@ -45,6 +48,8 @@ now.toLocaleTimeString('ar-EG')
 setInterval(updateDateTime,1000)
 updateDateTime()
 
+/* toast */
+
 function showToast(msg){
 
 toast.textContent=msg
@@ -55,6 +60,8 @@ toast.style.display="none"
 },3000)
 
 }
+
+/* بدء الجلسة */
 
 function startSession(expiry,duration){
 
@@ -103,10 +110,8 @@ const now=Date.now()
 const remaining=Math.floor((expiry-now)/1000)
 
 if(remaining<=0){
-
 endSession()
 return
-
 }
 
 const h=Math.floor(remaining/3600).toString().padStart(2,'0')
@@ -116,12 +121,25 @@ const s=(remaining%60).toString().padStart(2,'0')
 countdownTxt.textContent=`${h}:${m}:${s}`
 
 const percentage=(remaining/duration)*100
-
 progressInner.style.width=percentage+"%"
 
 },1000)
+let connectedSeconds=0
 
+connectionTimer=setInterval(()=>{
+
+connectedSeconds++
+
+let m=Math.floor(connectedSeconds/60)
+let s=connectedSeconds%60
+
+document.getElementById("sessionConnected").textContent =
+`${m}m ${s}s`
+
+},1000)
 }
+
+/* إنهاء الجلسة */
 
 function endSession(){
 
@@ -130,6 +148,7 @@ if(!sessionStart)return
 clearInterval(speedInterval)
 clearInterval(timerInterval)
 clearInterval(dataInterval)
+clearInterval(connectionTimer)
 
 document.getElementById("speedBox").style.display="none"
 document.getElementById("timerBox").style.display="none"
@@ -155,7 +174,6 @@ popupTime.textContent=`${m} دقيقة ${s} ثانية`
 popupUsage.textContent=dataUsage
 
 let remainingTime=sessionDuration-sessionTime
-
 if(remainingTime<0)remainingTime=0
 
 let rh=Math.floor(remainingTime/3600).toString().padStart(2,'0')
@@ -170,56 +188,31 @@ if(remainingData<0)remainingData=0
 popupRemainingData.textContent=remainingData
 
 sessionDataBox.style.display="grid"
-
-const continueSessionBtn=document.getElementById("continueSessionBtn")
-const finalExitBtn=document.getElementById("finalExitBtn")
-
-if(continueSessionBtn) continueSessionBtn.style.display="block"
-if(finalExitBtn) finalExitBtn.style.display="block"
-
 popup.style.display="flex"
 
 sessionStart=null
 
-if(continueSessionBtn){
+const popupOkBtn=document.getElementById("popupOkBtn")
 
-continueSessionBtn.onclick=()=>{
+if(popupOkBtn){
 
+popupOkBtn.onclick=()=>{
 popup.style.display="none"
-
-statusTxt.textContent="متصل"
-dot.className="dot online"
-
-document.getElementById("speedBox").style.display="block"
-document.getElementById("timerBox").style.display="block"
-document.getElementById("progressBar").style.display="block"
-document.getElementById("dataUsageBox").style.display="block"
-
-}
-
-}
-
-if(finalExitBtn){
-
-finalExitBtn.onclick=()=>{
-
-location.href="about:blank"
-
 }
 
 }
 
 }
+
+/* تسجيل الدخول */
 
 loginForm.addEventListener("submit",(e)=>{
 
 e.preventDefault()
 
 if(speedSelect.value===""){
-
 showToast("اختر سرعة الاتصال")
 return
-
 }
 
 showToast("جاري الاتصال ...")
@@ -240,13 +233,6 @@ popupTitle.textContent="تم تسجيل الدخول بنجاح"
 popupText.textContent="تم الاتصال بالشبكة"
 
 sessionDataBox.style.display="none"
-
-const continueSessionBtn=document.getElementById("continueSessionBtn")
-const finalExitBtn=document.getElementById("finalExitBtn")
-
-if(continueSessionBtn) continueSessionBtn.style.display="none"
-if(finalExitBtn) finalExitBtn.style.display="none"
-
 popup.style.display="flex"
 
 const popupOkBtn=document.getElementById("popupOkBtn")
@@ -257,13 +243,18 @@ popupOkBtn.onclick=()=>{
 
 popup.style.display="none"
 
+/* افتح لوحة الجلسة فقط اذا كان متصل */
+
+if(sessionStart){
+
 const panel=document.getElementById("sessionPanel")
 
 panel.style.display="flex"
 
 document.getElementById("sessionUser").textContent=cardInput.value
-
 document.getElementById("sessionIP").textContent="172.17.20.14"
+
+}
 
 }
 
@@ -273,26 +264,29 @@ document.getElementById("sessionIP").textContent="172.17.20.14"
 
 })
 
+/* تسجيل الخروج */
+
 logoutBtn.addEventListener("click",()=>{
 endSession()
 })
+
+/* حفظ الكرت */
 
 document.getElementById("saveCardBtn").addEventListener("click",()=>{
 
 const val=cardInput.value.trim()
 
 if(!val){
-
 showToast("ادخل رقم الكرت")
 return
-
 }
 
 localStorage.setItem("saved_card",val)
-
 showToast("تم حفظ الكرت")
 
 })
+
+/* تحميل الكرت */
 
 window.addEventListener("DOMContentLoaded",()=>{
 
@@ -301,6 +295,8 @@ const saved=localStorage.getItem("saved_card")
 if(saved)cardInput.value=saved
 
 })
+
+/* الوضع الليلي */
 
 const themeToggle=document.getElementById("themeToggle")
 
@@ -313,21 +309,13 @@ document.body.classList.contains("dark")?"☀️":"🌙"
 
 }
 
-const plansPage=document.getElementById("plansPage")
+/* الباقات */
 
+const plansPage=document.getElementById("plansPage")
 const closePlans=document.querySelector(".closePlans")
 
 document.getElementById("plansBtn").onclick=()=>{
 plansPage.style.display="flex"
-}
-
-const openPlansLink=document.getElementById("openPlansLink")
-
-if(openPlansLink){
-openPlansLink.onclick=(e)=>{
-e.preventDefault()
-plansPage.style.display="flex"
-}
 }
 
 if(closePlans){
@@ -342,55 +330,48 @@ plansPage.style.display="none"
 }
 }
 
+/* الكرت المحفوظ */
+
 document.getElementById("lastCardLogin").onclick=()=>{
 
 const saved=localStorage.getItem("saved_card")
 
 if(!saved){
-
 showToast("لا يوجد كرت محفوظ")
 return
-
 }
 
 cardInput.value=saved
-
 loginForm.dispatchEvent(new Event("submit"))
 
 }
+
+/* المراكز */
 
 const centersPage=document.getElementById("centersPage")
 const centersBtn=document.getElementById("centersBtn")
 const closeCenters=document.querySelector(".closeCenters")
 
 if(centersBtn){
-
 centersBtn.onclick=()=>{
-
 centersPage.style.display="flex"
-
 }
-
 }
 
 if(closeCenters){
-
 closeCenters.onclick=()=>{
-
 centersPage.style.display="none"
-
+}
 }
 
-}
+/* اغلاق لوحة الجلسة */
 
 const closeSessionPanel=document.getElementById("closeSessionPanel")
 
 if(closeSessionPanel){
 
 closeSessionPanel.onclick=()=>{
-
 document.getElementById("sessionPanel").style.display="none"
-
 }
 
 }
