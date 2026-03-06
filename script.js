@@ -79,6 +79,8 @@ dot.className="dot online"
 
 logoutBtn.style.display="block"
 
+document.getElementById("mainCard").classList.add("connected")
+
 speedInterval=setInterval(()=>{
 
 const speed=(Math.random()*40+10).toFixed(1)
@@ -137,6 +139,8 @@ document.getElementById("dataUsageBox").style.display="none"
 statusTxt.textContent="غير متصل"
 dot.className="dot offline"
 logoutBtn.style.display="none"
+
+document.getElementById("mainCard").classList.remove("connected")
 
 let sessionTime=Math.floor((Date.now()-sessionStart)/1000)
 
