@@ -881,6 +881,9 @@ border:1px solid rgba(255,255,255,0.2);
 
 box-shadow:0 20px 60px rgba(0,0,0,0.5);
 
+overflow-y:auto;
+max-height:90vh;
+
 }
 
 .session-header{
@@ -952,4 +955,75 @@ font-weight:bold;
 
 cursor:pointer;
 
+}
+.expired-msg{
+margin-top:12px;
+padding:12px;
+background:rgba(255,70,70,0.15);
+border:1px solid rgba(255,70,70,0.5);
+border-radius:12px;
+text-align:center;
+color:#ff6b6b;
+font-weight:bold;
+font-size:14px;
+animation:blinkExpired 1.5s infinite;
+}
+
+@keyframes blinkExpired{
+
+0%{opacity:1;}
+50%{opacity:0.6;}
+100%{opacity:1;}
+
+}
+/* تصميم اختيار السرعة داخل لوحة الجلسة */
+
+#newSpeedSelect{
+
+width:100%;
+padding:12px;
+
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.2);
+
+background:rgba(255,255,255,0.08);
+color:white;
+
+font-size:15px;
+text-align:center;
+
+backdrop-filter:blur(10px);
+
+outline:none;
+margin-top:10px;
+
+}
+
+/* عند فتح القائمة */
+
+#newSpeedSelect option{
+
+background:#1e2433;
+color:white;
+
+}
+/* زر تسجيل الخروج في لوحة الجلسة */
+
+#sessionLogoutBtn{
+display:block;
+width:100%;
+padding:12px;
+border-radius:25px;
+border:none;
+background:linear-gradient(45deg,#ff4b2b,#ff416c);
+color:white;
+margin-top:15px;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
+}
+
+#sessionLogoutBtn:hover{
+transform:scale(1.05);
+box-shadow:0 8px 20px rgba(0,0,0,0.4);
 }

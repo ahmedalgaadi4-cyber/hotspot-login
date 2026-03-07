@@ -7,6 +7,7 @@ let dataUsage=0
 let sessionStart=null
 let sessionDuration=0
 let totalData=0
+let manualLogout=false
 
 const loginForm=document.getElementById("loginForm")
 const statusTxt=document.getElementById("status")
@@ -66,6 +67,9 @@ toast.style.display="none"
 function startSession(expiry,duration){
 
 sessionStart=Date.now()
+localStorage.setItem("hotspot_active","1")
+localStorage.setItem("hotspot_start",sessionStart)
+localStorage.setItem("hotspot_duration",duration)
 sessionDuration=duration
 dataUsage=0
 
@@ -88,13 +92,36 @@ logoutBtn.style.display="block"
 
 document.getElementById("mainCard").classList.add("connected")
 
-speedInterval=setInterval(()=>{
+async function measureSpeed(){
 
-const speed=(Math.random()*40+10).toFixed(1)
+try{
 
-document.getElementById("speedValue").textContent=speed
+const startTime = performance.now()
 
-},2000)
+const response = await fetch("https://speed.cloudflare.com/__down?bytes=1000000")
+
+const blob = await response.blob()
+
+const endTime = performance.now()
+
+const duration = (endTime - startTime) / 1000
+
+const bitsLoaded = blob.size * 8
+
+const speedMbps = (bitsLoaded / duration / 1024 / 1024).toFixed(1)
+
+document.getElementById("speedValue").textContent = speedMbps
+
+}catch(e){
+
+document.getElementById("speedValue").textContent = "--"
+
+}
+
+}
+
+speedInterval = setInterval(measureSpeed,5000)
+measureSpeed()
 
 dataInterval=setInterval(()=>{
 
@@ -142,6 +169,9 @@ document.getElementById("sessionConnected").textContent =
 /* إنهاء الجلسة */
 
 function endSession(){
+    localStorage.removeItem("hotspot_active")
+localStorage.removeItem("hotspot_start")
+localStorage.removeItem("hotspot_duration")
 
 if(!sessionStart)return
 
@@ -166,8 +196,22 @@ let sessionTime=Math.floor((Date.now()-sessionStart)/1000)
 let m=Math.floor(sessionTime/60)
 let s=sessionTime%60
 
+if(manualLogout){
+
 popupTitle.textContent="تم تسجيل الخروج بنجاح"
 popupText.textContent="بيانات الجلسة"
+
+}else{
+
+popupTitle.textContent="انتهت صلاحية الجلسة"
+popupText.textContent="يرجى إدخال كرت جديد"
+
+/* اظهار رسالة انتهاء الكرت في الصفحة */
+
+const expiredMsg=document.getElementById("cardExpiredMsg")
+if(expiredMsg) expiredMsg.style.display="block"
+
+}
 
 popupUser.textContent=cardInput.value
 popupTime.textContent=`${m} دقيقة ${s} ثانية`
@@ -189,6 +233,13 @@ popupRemainingData.textContent=remainingData
 
 sessionDataBox.style.display="grid"
 popup.style.display="flex"
+/* اظهار ازرار الجلسة عند تسجيل الخروج */
+
+const continueBtn=document.getElementById("continueSessionBtn")
+const exitBtn=document.getElementById("finalExitBtn")
+
+if(continueBtn) continueBtn.style.display="block"
+if(exitBtn) exitBtn.style.display="block"
 
 sessionStart=null
 
@@ -211,8 +262,8 @@ loginForm.addEventListener("submit",(e)=>{
 e.preventDefault()
 
 if(speedSelect.value===""){
-showToast("اختر سرعة الاتصال")
-return
+speedSelect.value="medium"
+showToast("تم اختيار السرعة المتوسطة تلقائياً")
 }
 
 showToast("جاري الاتصال ...")
@@ -228,11 +279,22 @@ if(speedSelect.value==="ultra")duration=9000
 const expiry=Date.now()+duration*1000
 
 startSession(expiry,duration)
+const expiredMsg=document.getElementById("cardExpiredMsg")
+if(expiredMsg) expiredMsg.style.display="none"
 
 popupTitle.textContent="تم تسجيل الدخول بنجاح"
 popupText.textContent="تم الاتصال بالشبكة"
 
 sessionDataBox.style.display="none"
+
+/* اخفاء ازرار الخروج */
+
+const continueBtn=document.getElementById("continueSessionBtn")
+const exitBtn=document.getElementById("finalExitBtn")
+
+if(continueBtn) continueBtn.style.display="none"
+if(exitBtn) exitBtn.style.display="none"
+
 popup.style.display="flex"
 
 const popupOkBtn=document.getElementById("popupOkBtn")
@@ -267,7 +329,11 @@ document.getElementById("sessionIP").textContent="172.17.20.14"
 /* تسجيل الخروج */
 
 logoutBtn.addEventListener("click",()=>{
+
+manualLogout=true
 endSession()
+manualLogout=false
+
 })
 
 /* حفظ الكرت */
@@ -290,9 +356,30 @@ showToast("تم حفظ الكرت")
 
 window.addEventListener("DOMContentLoaded",()=>{
 
-const saved=localStorage.getItem("saved_card")
+const saved = localStorage.getItem("saved_card")
+if(saved) cardInput.value = saved
 
-if(saved)cardInput.value=saved
+const active = localStorage.getItem("hotspot_active")
+const start = localStorage.getItem("hotspot_start")
+const duration = localStorage.getItem("hotspot_duration")
+
+if(active==="1" && start && duration){
+
+const expiry = parseInt(start) + parseInt(duration)*1000
+
+/* إعادة تشغيل الجلسة */
+
+startSession(expiry, parseInt(duration))
+
+/* فتح نافذة الجلسة مباشرة */
+
+const panel = document.getElementById("sessionPanel")
+panel.style.display = "flex"
+
+document.getElementById("sessionUser").textContent = cardInput.value
+document.getElementById("sessionIP").textContent = "172.17.20.14"
+
+}
 
 })
 
@@ -364,14 +451,118 @@ centersPage.style.display="none"
 }
 }
 
-/* اغلاق لوحة الجلسة */
 
-const closeSessionPanel=document.getElementById("closeSessionPanel")
+const changeSpeedBtn=document.getElementById("changeSpeedBtn")
+const speedChangeBox=document.getElementById("speedChangeBox")
+const applySpeedBtn=document.getElementById("applySpeedBtn")
+const newSpeedSelect=document.getElementById("newSpeedSelect")
 
-if(closeSessionPanel){
+if(changeSpeedBtn){
 
-closeSessionPanel.onclick=()=>{
-document.getElementById("sessionPanel").style.display="none"
+changeSpeedBtn.onclick=()=>{
+
+speedChangeBox.style.display="block"
+
+}
+
+}
+
+if(applySpeedBtn){
+
+applySpeedBtn.onclick=()=>{
+
+const newSpeed=newSpeedSelect.value
+
+speedSelect.value=newSpeed
+
+showToast("تم تغيير السرعة بنجاح")
+
+speedChangeBox.style.display="none"
+
+}
+
+}
+const sessionLogoutBtn = document.getElementById("sessionLogoutBtn")
+
+if(sessionLogoutBtn){
+
+sessionLogoutBtn.onclick = ()=>{
+
+document.getElementById("sessionPanel").style.display = "none"
+
+manualLogout = true
+endSession()
+manualLogout = false
+
+}
+
+}
+/* الدخول مرة أخرى بنفس الجلسة */
+
+const continueSessionBtn = document.getElementById("continueSessionBtn")
+
+if(continueSessionBtn){
+
+continueSessionBtn.onclick = ()=>{
+
+popup.style.display = "none"
+
+/* رسالة الترحيب */
+
+popupTitle.textContent = "تم تسجيل الدخول بنجاح"
+popupText.textContent = "تم استعادة الجلسة"
+
+sessionDataBox.style.display = "none"
+
+/* اخفاء ازرار الجلسة */
+
+const continueBtn=document.getElementById("continueSessionBtn")
+const exitBtn=document.getElementById("finalExitBtn")
+
+if(continueBtn) continueBtn.style.display="none"
+if(exitBtn) exitBtn.style.display="none"
+
+
+popup.style.display = "flex"
+
+const popupOkBtn = document.getElementById("popupOkBtn")
+
+if(popupOkBtn){
+
+popupOkBtn.onclick = ()=>{
+
+popup.style.display = "none"
+
+/* فتح لوحة الجلسة */
+
+const panel = document.getElementById("sessionPanel")
+
+panel.style.display = "flex"
+
+document.getElementById("sessionUser").textContent = cardInput.value
+document.getElementById("sessionIP").textContent = "172.17.20.14"
+
+}
+
+}
+
+}
+
+}
+/* خروج نهائي */
+
+const finalExitBtn = document.getElementById("finalExitBtn")
+
+if(finalExitBtn){
+
+finalExitBtn.onclick = ()=>{
+
+popup.style.display = "none"
+
+/* العودة لصفحة تسجيل الدخول */
+
+document.getElementById("sessionPanel").style.display = "none"
+
 }
 
 }
