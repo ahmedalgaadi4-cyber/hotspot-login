@@ -82,8 +82,10 @@ box-shadow:0 0 10px #00ff99;
 /* الكرت */
 
 .glass-card{
-width:380px;
-padding:40px;
+width:90%;
+max-width:380px;
+margin:auto;
+padding:30px;
 border-radius:25px;
 background:var(--card-bg);
 backdrop-filter:blur(25px);
@@ -132,7 +134,7 @@ box-shadow:0 0 50px rgba(0,255,200,0.9);
 /* العنوان */
 
 .main-title{
-margin-bottom:25px;
+margin-bottom:12px;
 font-size:28px;
 background:linear-gradient(45deg,#fff,#cfd9ff);
 -webkit-background-clip:text;
@@ -305,8 +307,9 @@ transition:0.4s;
 
 .theme-btn{top:80px;}
 
-.floating-plans-btn{top:135px;}
+.floating-plans-btn{top:140px;}
 
+.floating-centers-btn{top:200px;}
 .theme-btn:hover,
 .floating-plans-btn:hover{
 transform:scale(1.15) rotate(10deg);
@@ -1026,4 +1029,25 @@ transition:0.3s;
 #sessionLogoutBtn:hover{
 transform:scale(1.05);
 box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+@media (max-width:480px){
+
+body{
+padding:10px;
+}
+
+.glass-card{
+width:95%;
+padding:25px;
+}
+
+.main-title{
+font-size:22px;
+}
+
+.submit-btn{
+font-size:17px;
+padding:14px;
+}
+
 }
