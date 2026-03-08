@@ -1,4 +1,9 @@
 *{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+*{
 margin:0;
 padding:0;
 box-sizing:border-box;
@@ -33,6 +38,8 @@ color:var(--text);
 transition:0.6s;
 position:relative;
 overflow-x:hidden;
+overflow:hidden;
+height:100vh;
 }
 
 /* ضوء الخلفية */
@@ -136,9 +143,10 @@ box-shadow:0 0 50px rgba(0,255,200,0.9);
 .main-title{
 margin-bottom:12px;
 font-size:28px;
-background:linear-gradient(45deg,#fff,#cfd9ff);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+background: linear-gradient(45deg,#ff00cc,#3333ff);
+background-clip: text;
+-webkit-background-clip: text;
+color: transparent;
 }
 
 /* صناديق المعلومات */
@@ -1050,4 +1058,17 @@ font-size:17px;
 padding:14px;
 }
 
+}
+.submit-btn:active,
+.logout-btn:active,
+#saveCardBtn:active{
+transform:scale(0.96);
+box-shadow:0 2px 8px rgba(0,0,0,0.3);
+}
+#logoutBtn,
+#timerBox,
+#dataUsageBox,
+#speedBox,
+#progressBar{
+display:none !important;
 }
